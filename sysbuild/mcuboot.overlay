@@ -4,4 +4,8 @@
           mcuboot-button0 = &button1;
           mcuboot-led0 = &led1;
     };
+
+    chosen {
+      nordic,pm-ext-flash = &mx25r64;
+    };
 };

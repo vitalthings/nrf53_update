@@ -1,0 +1,128 @@
+EMPTY_1:
+  address: 0xf8000
+  end_address: 0xfc000
+  placement:
+    after:
+    - mcuboot_secondary
+  region: flash_primary
+  size: 0x4000
+app:
+  address: 0x10200
+  end_address: 0x84000
+  region: flash_primary
+  size: 0x73e00
+mcuboot:
+  address: 0x0
+  end_address: 0x10000
+  placement:
+    align:
+      end: 0x1000
+    before:
+    - mcuboot_primary
+  region: flash_primary
+  size: 0x10000
+mcuboot_pad:
+  address: 0x10000
+  end_address: 0x10200
+  placement:
+    align:
+      start: 0x4000
+    before:
+    - mcuboot_primary_app
+  region: flash_primary
+  size: 0x200
+mcuboot_primary:
+  address: 0x10000
+  end_address: 0x84000
+  orig_span: &id001
+  - mcuboot_pad
+  - app
+  region: flash_primary
+  sharers: 0x1
+  size: 0x74000
+  span: *id001
+mcuboot_primary_app:
+  address: 0x10200
+  end_address: 0x84000
+  orig_span: &id002
+  - app
+  region: flash_primary
+  size: 0x73e00
+  span: *id002
+mcuboot_primary_1:
+  address: 0x0
+  device: nordic_ram_flash_controller
+  end_address: 0x40000
+  region: ram_flash
+  size: 0x40000
+mcuboot_secondary:
+  address: 0x84000
+  end_address: 0xf8000
+  placement:
+    after:
+    - mcuboot_primary
+    align:
+      start: 0x4000
+  region: flash_primary
+  share_size:
+  - mcuboot_primary
+  size: 0x74000
+# MCUBoot expects a slot pair for each updatable FW image.
+# As a workaround to trick MCUBoot into thinking we have this, 
+# we create a placeholder partition for the HCI IPC firmware here,
+# which overlaps with the secondary partition for the app. 
+mcuboot_secondary_1:
+  address: 0x84000
+  end_address: 0xC4000
+  placement:
+    after:
+    - mcuboot_primary
+    align:
+      start: 0x4000
+  region: flash_primary
+  share_size:
+  - mcuboot_primary
+  size: 0x40000
+otp:
+  address: 0xff8100
+  end_address: 0xff83fc
+  region: otp
+  size: 0x2fc
+pcd_sram:
+  address: 0x20000000
+  end_address: 0x20002000
+  placement:
+    after:
+    - start
+  region: sram_primary
+  size: 0x2000
+# Simulated flash partition in RAM for 
+# MCUBoot to transfer FW update to the netcore.
+ram_flash:
+  address: 0x0
+  end_address: 0x40000
+  region: ram_flash
+  size: 0x40000
+rpmsg_nrf53_sram:
+  address: 0x20070000
+  end_address: 0x20080000
+  placement:
+    before:
+    - end
+  region: sram_primary
+  size: 0x10000
+settings_storage:
+  address: 0xfc000
+  end_address: 0x100000
+  placement:
+    align:
+      start: 0x4000
+    before:
+    - end
+  region: flash_primary
+  size: 0x4000
+sram_primary:
+  address: 0x20002000
+  end_address: 0x20070000
+  region: sram_primary
+  size: 0x6e000

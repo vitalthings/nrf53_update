@@ -1,0 +1,14 @@
+Log ./jlink_flash_second.txt
+ExitOnError 1
+
+# Seems to work with:
+# imgtool sign --version 0.1.42+0 --align 4 --slot-size 0x74000 --pad --confirm --pad-header --header-size 0x200 -k /home/sigma/ncs/v3.0.2/bootloader/mcuboot/root-rsa-2048.pem /home/sigma/repo/nrf53_update/nrf53_update/build/signed_by_b0_ipc_radio.bin update/ipc_radio.bin
+
+# Device CORTEX-M33
+Device NRF5340_XXAA_APP
+SelectInterface SWD
+Speed 5000
+
+LoadFile update/ipc_radio.bin 0x84000
+
+Exit
